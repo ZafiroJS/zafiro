@@ -37,7 +37,7 @@
     "@types/sinon": "^1.16.29",
     "bluebird": "^3.4.1",
     "browserify": "^14.0.0",
-    "chai": "^3.4.1",
+    "chai": "^4.0.0",
     "gulp": "^3.9.0",
     "gulp-istanbul": "^1.0.0",
     "gulp-mocha": "^4.0.0",
