@@ -1,6 +1,6 @@
 <img width="400" src="./assets/logo.png" />
 
-## :gem: Zafiro is a strongly typed and lightweight web framework for Node.js apps powered by [TypeScript](), [InversifyJS](https://github.com/inversify/InversifyJS), [TypeORM](https://github.com/typeorm/typeorm) and [Express](https://github.com/expressjs/express) :rocket:
+## :gem: Zafiro is a strongly typed and lightweight web framework for Node.js apps powered by [TypeScript](https://github.com/microsoft/typescript), [InversifyJS](https://github.com/inversify/InversifyJS), [TypeORM](https://github.com/typeorm/typeorm) and [Express](https://github.com/expressjs/express) :rocket:
 
 [![Join the chat at https://gitter.im/inversify/InversifyJS](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/inversify/InversifyJS?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![npm version](https://badge.fury.io/js/zafiro.svg)](http://badge.fury.io/js/zafiro)
