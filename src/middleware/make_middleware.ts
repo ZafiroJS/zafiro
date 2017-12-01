@@ -2,9 +2,9 @@ import * as express from "express";
 import { inject, injectable } from "inversify";
 import { BaseMiddleware } from "inversify-express-utils";
 import { ZAFIRO_TYPE } from "../constants/types";
-import { Logger, MakeMiddlewareCallBack } from "../interfaces";
+import { Logger, MiddlewareFactory } from "../interfaces";
 
-export const makeMiddleware = (cb: MakeMiddlewareCallBack) => {
+export const makeMiddleware = (cb: MiddlewareFactory) => {
 
     class CustomMiddleware extends BaseMiddleware {
         @inject(ZAFIRO_TYPE.Logger) private readonly _logger: Logger;
@@ -13,10 +13,13 @@ export const makeMiddleware = (cb: MakeMiddlewareCallBack) => {
             res: express.Response,
             next: express.NextFunction
         ): void {
-            cb(this._logger)(this.httpContext, next);
+            (async () => {
+                const middleware = cb(this._logger);
+                await middleware(this.httpContext, next);
+            })();
         }
     }
 
-    return injectable()(CustomMiddleware);
+    return injectable()(CustomMiddleware) as { new(): BaseMiddleware };
 
 };

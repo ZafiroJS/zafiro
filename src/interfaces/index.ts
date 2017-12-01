@@ -41,10 +41,10 @@ export interface AccountRepository {
     isInRole(userDetails: any, role: string): Promise<boolean>;
 }
 
-export type MakeMiddlewareCallBack = (logger: Logger) => (
+export type MiddlewareFactory = (logger: Logger) => (
     httpContext: expressInterfaces.HttpContext,
     next: express.NextFunction
-) => void;
+) => Promise<void>;
 
 export interface Logger {
     info(msg: string, ...args: any[]): void;
