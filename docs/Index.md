@@ -1,3 +1,0 @@
-# Zafiro docs
-
-TODO
