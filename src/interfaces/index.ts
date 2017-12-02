@@ -8,6 +8,7 @@ export type SupportedDatabases = ConnectionOptions["type"];
 
 export interface AppOptions {
     database: SupportedDatabases;
+    dbLogging?: boolean;
     containerModules?: inversifyInterfaces.ContainerModule[];
     dir?: string[];
     container?: inversifyInterfaces.Container;
@@ -24,6 +25,7 @@ export interface Result {
 
 export interface DbClient {
     createConnection(
+        dbLogging: boolean,
         database: SupportedDatabases,
         directoryName: string,
         getPath: (dirOrFile: string[]) => string

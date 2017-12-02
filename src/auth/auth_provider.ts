@@ -17,10 +17,10 @@ export class AuthProvider implements expressInterfaces.AuthProvider {
         req: express.Request,
         res: express.Response,
         next: express.NextFunction
-    ): Promise<expressInterfaces.Principal> {
+    ) {
             const token = req.headers["x-auth-token"];
             if (token !== undefined && typeof token === "string") {
-                return this._accountRepository.getPrincipal(token);
+                return await this._accountRepository.getPrincipal(token);
             }
             return principalFactory();
     }

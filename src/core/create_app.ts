@@ -38,6 +38,7 @@ export default async function createApp(
     const dbClient = new DbClient();
 
     await dbClient.createConnection(
+        options.dbLogging || false,
         options.database,
         "entities",
         (dirOrFile: string[]) => path.join(__dirname, ...dir, ...dirOrFile)

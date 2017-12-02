@@ -8,14 +8,18 @@ import readdir from "../fs/readdir";
 export default class DbClient implements interfaces.DbClient {
 
     public async createConnection(
+        dbLogging: boolean,
         database: interfaces.SupportedDatabases,
         directoryName: string,
         getPath: (dirOrFile: string[]) => string
     ) {
-        await this._createConnection(database, directoryName, getPath);
+        await this._createConnection(
+            dbLogging, database, directoryName, getPath
+        );
     }
 
     private async _createConnection(
+        dbLogging: boolean,
         database: interfaces.SupportedDatabases,
         directoryName: string,
         getPath: (dirOrFile: string[]) => string
@@ -46,6 +50,7 @@ export default class DbClient implements interfaces.DbClient {
                 database: dbName,
                 entities: paths,
                 synchronize: true,
+                logging: dbLogging
             });
             console.log(chalk.green("Success!"));
             return connection;
