@@ -37,7 +37,7 @@ export default async function createApp(
     // https://github.com/typeorm/typeorm/issues/592
     const dbClient = new DbClient();
 
-    const connection = await  dbClient.getConnection(
+    await dbClient.createConnection(
         options.database,
         "entities",
         (dirOrFile: string[]) => path.join(__dirname, ...dir, ...dirOrFile)
@@ -87,6 +87,6 @@ export default async function createApp(
     // Create and run Express app
     const app = server.build();
 
-    return { app, connection };
+    return { app };
 
 }

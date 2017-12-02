@@ -19,16 +19,15 @@ export interface AppOptions {
 }
 
 export interface Result {
-    connection: Connection;
     app: express.Application;
 }
 
 export interface DbClient {
-    getConnection(
+    createConnection(
         database: SupportedDatabases,
         directoryName: string,
         getPath: (dirOrFile: string[]) => string
-    ): Promise<Connection>;
+    ): Promise<void>;
 }
 
 export interface AccountRepository {

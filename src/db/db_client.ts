@@ -7,12 +7,12 @@ import readdir from "../fs/readdir";
 @injectable()
 export default class DbClient implements interfaces.DbClient {
 
-    public async getConnection(
+    public async createConnection(
         database: interfaces.SupportedDatabases,
         directoryName: string,
         getPath: (dirOrFile: string[]) => string
     ) {
-        return await this._createConnection(database, directoryName, getPath);
+        await this._createConnection(database, directoryName, getPath);
     }
 
     private async _createConnection(
