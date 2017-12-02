@@ -16,10 +16,23 @@ export default async function readdir(
                         ERROR_MSG.cannot_read_path(path)
                     )
                 );
+                console.log(err);
                 reject(false);
             } else {
                 console.log(chalk.green("Success!"));
-                resolve(files);
+                // If we are using ts-node we ignore js file
+                // otherwise we ignore ts files, we do this
+                // because some people use the same directory
+                // to store both the input (ts) and output (js)
+                if (process.env.TS_NODE_COMPILER) {
+                    resolve(
+                        files.filter(f => f.indexOf(".js") === -1)
+                    );
+                } else {
+                    resolve(
+                        files.filter(f => f.indexOf(".ts") === -1)
+                    );
+                }
             }
         });
     });

@@ -18,21 +18,16 @@ export interface AppOptions {
     expressConfig?: (app: express.Application) => void;
 }
 
-export interface DbClient {
-    getConnection(
-        database: SupportedDatabases,
-        directoryName: string,
-        getPath: (dirOrFile: string[]) => string
-    ): Promise<Connection>;
+export interface Result {
+    app: express.Application;
 }
 
-export interface RepositoryFactory {
-    getRepositories<T>(
+export interface DbClient {
+    createConnection(
         database: SupportedDatabases,
-        entities: Array<{ new (): T }>,
         directoryName: string,
         getPath: (dirOrFile: string[]) => string
-    ): Promise<Repository<T>[]>;
+    ): Promise<void>;
 }
 
 export interface AccountRepository {

@@ -4,24 +4,17 @@ import { interfaces as inversifyInterfaces } from "inversify";
 import * as interfaces from "../interfaces";
 import { ZAFIRO_TYPE } from "../constants/types";
 import readdirContents from "../fs/readdir_contents";
+import { getRepositories } from "../db/repository_factory";
 
 export default async function bindRepositories(
-    database: interfaces.SupportedDatabases,
     container: inversifyInterfaces.Container,
     directoryName: string,
     getPath: (dirOrFile: string[]) => string
 ) {
 
-    const factory = container.get<interfaces.RepositoryFactory>(ZAFIRO_TYPE.RepositoryFactory);
     const entities = await readdirContents(directoryName, getPath);
     const entityTypes = entities.map(e => Symbol.for(`Repository<${e.name}>`));
-
-    const repositories = await factory.getRepositories<any>(
-        database,
-        entities,
-        directoryName,
-        getPath
-    );
+    const repositories = await getRepositories<any>(entities);
 
     repositories.forEach((repository, i) => {
         const repositoryType = entityTypes[i];

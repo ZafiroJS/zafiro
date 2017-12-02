@@ -9,10 +9,11 @@ import * as interfaces from "../interfaces";
 import { ZAFIRO_TYPE } from "../constants/types";
 import { AuthProvider } from "../auth/auth_provider";
 import { principalFactory } from "../auth/principal_factory";
+import DbClient from "../db/db_client";
 
 export default async function createApp(
     options: interfaces.AppOptions
-) {
+): Promise<interfaces.Result> {
 
     // The frameworks expects the controllers and entities
     // to be unders /src/controllers and /src/entitites
@@ -24,7 +25,7 @@ export default async function createApp(
     // Create and configure IoC container
     const container = options.container || new Container();
 
-    // Create bindings
+    // Declare app bindings
     container.load(coreBindings);
 
     if (options.containerModules) {
@@ -32,9 +33,18 @@ export default async function createApp(
         container.load(...modules);
     }
 
+    // Create db a unique connection
+    // https://github.com/typeorm/typeorm/issues/592
+    const dbClient = new DbClient();
+
+    await dbClient.createConnection(
+        options.database,
+        "entities",
+        (dirOrFile: string[]) => path.join(__dirname, ...dir, ...dirOrFile)
+    );
+
     // Create bindings for repositories
     await bindRepositories(
-        options.database,
         container,
         "entities",
         (dirOrFile: string[]) => path.join(__dirname, ...dir, ...dirOrFile)
@@ -77,6 +87,6 @@ export default async function createApp(
     // Create and run Express app
     const app = server.build();
 
-    return app;
+    return { app };
 
 }

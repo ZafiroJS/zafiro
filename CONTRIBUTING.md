@@ -8,13 +8,13 @@
 git clone https://github.com/YOUR_USERNAME/zafiro.git
 ```
 
-2 Install npm dependencies
+2 Setup
 
 ```sh
-npm install
+npm run setup
 ```
 
-3 Run build process
+3 Run the tests
 
 ```sh
 npm test
