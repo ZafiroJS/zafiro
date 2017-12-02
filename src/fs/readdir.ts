@@ -31,12 +31,12 @@ export default async function readdir(
                 const contiansJsFiles = files.find(f => f.indexOf(".js") !== -1) !== undefined;
                 const contiansTsFiles = files.find(f => f.indexOf(".ts") !== -1) !== undefined;
                 if (contiansJsFiles && contiansTsFiles) {
-                    console.log(
-                        chalk.yellow("Folder contains both .js and .ts files, .ts files will be ignored")
-                    );
-                    resolve(
-                        files.filter(f => f.indexOf(".ts") !== -1)
-                    );
+                    const filteredFiles = files.filter(f => f.indexOf(".ts") === -1);
+                    console.log(chalk.yellow("Folder contains both .js and .ts files:"));
+                    console.log(chalk.yellow(JSON.stringify(files)));
+                    console.log(chalk.yellow("All .ts files will be ignored:"));
+                    console.log(chalk.yellow(JSON.stringify(filteredFiles)));
+                    resolve(filteredFiles);
                 }
                 resolve(files);
             }
