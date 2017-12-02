@@ -5,8 +5,10 @@ import { AccountRepository, Logger } from "./interfaces";
 import { makeMiddleware } from "./middleware/make_middleware";
 import { isInRoleMiddlewareCb, isAuthenticatedMiddlewareCb } from "./auth/middleware_utils";
 import { ZAFIRO_TYPE } from "./constants/types";
+import * as interfaces from "./interfaces";
 
 export {
+    interfaces,
     ZAFIRO_TYPE,
     createApp,
     principalFactory,
