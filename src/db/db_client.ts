@@ -7,19 +7,12 @@ import readdir from "../fs/readdir";
 @injectable()
 export default class DbClient implements interfaces.DbClient {
 
-    private _cache: Connection | null = null;
-
     public async getConnection(
         database: interfaces.SupportedDatabases,
         directoryName: string,
         getPath: (dirOrFile: string[]) => string
     ) {
-        if (this._cache !== null) {
-            return this._cache;
-        } else {
-            this._cache = await this._createConnection(database, directoryName, getPath);
-            return this._cache;
-        }
+        return await this._createConnection(database, directoryName, getPath);
     }
 
     private async _createConnection(
@@ -59,6 +52,7 @@ export default class DbClient implements interfaces.DbClient {
 
         } catch (err) {
             console.log(chalk.red("Cannot connect to DB"));
+            console.log(err);
             throw err;
         }
     }

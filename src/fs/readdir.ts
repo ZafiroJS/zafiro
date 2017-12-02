@@ -16,6 +16,7 @@ export default async function readdir(
                         ERROR_MSG.cannot_read_path(path)
                     )
                 );
+                console.log(err);
                 reject(false);
             } else {
                 console.log(chalk.green("Success!"));
