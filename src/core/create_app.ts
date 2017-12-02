@@ -33,7 +33,8 @@ export default async function createApp(
         container.load(...modules);
     }
 
-    // Create db connection
+    // Create db a unique connection
+    // https://github.com/typeorm/typeorm/issues/592
     const dbClient = new DbClient();
 
     const connection = await  dbClient.getConnection(
