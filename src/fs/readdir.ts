@@ -20,20 +20,25 @@ export default async function readdir(
                 reject(false);
             } else {
                 console.log(chalk.green("Success!"));
-                // If we are not using ts-node we ignore ts
-                // files, we do this because some people use
-                // the same directory to store both the
-                // input (ts) and output (js)
-                if (process.env.TS_NODE_COMPILER === undefined) {
+                // Some people use the same directory to store
+                // both the input (ts) and output (js) files
+                // used and generared by the TS compiler.
+                // If JavaScript files are available we ignore
+                // the TS files because we asume that compilation
+                // has been completed. If for example we use
+                // ts-node no JavaScript files will be available
+                // in that case we don't ignore the TS files.
+                const contiansJsFiles = files.find(f => f.indexOf(".js") !== -1) !== undefined;
+                const contiansTsFiles = files.find(f => f.indexOf(".ts") !== -1) !== undefined;
+                if (contiansJsFiles && contiansTsFiles) {
                     console.log(
-                        chalk.yellow(
-                            "Not detected ts-node: .ts files will be ignored!"
-                        )
+                        chalk.yellow("Folder contains both .js and .ts files, .ts files will be ignored")
                     );
                     resolve(
-                        files.filter(f => f.indexOf(".ts") === -1)
+                        files.filter(f => f.indexOf(".ts") !== -1)
                     );
                 }
+                resolve(files);
             }
         });
     });
