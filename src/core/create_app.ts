@@ -88,6 +88,8 @@ export default async function createApp(
     // Create and run Express app
     const app = server.build();
 
-    return { app };
+    const result: interfaces.Result = { app };
+
+    return result;
 
 }
