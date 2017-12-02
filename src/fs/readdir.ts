@@ -20,15 +20,16 @@ export default async function readdir(
                 reject(false);
             } else {
                 console.log(chalk.green("Success!"));
-                // If we are using ts-node we ignore js file
-                // otherwise we ignore ts files, we do this
-                // because some people use the same directory
-                // to store both the input (ts) and output (js)
-                if (process.env.TS_NODE_COMPILER) {
-                    resolve(
-                        files.filter(f => f.indexOf(".js") === -1)
+                // If we are not using ts-node we ignore ts
+                // files, we do this because some people use
+                // the same directory to store both the
+                // input (ts) and output (js)
+                if (process.env.TS_NODE_COMPILER === undefined) {
+                    console.log(
+                        chalk.yellow(
+                            "Not detected ts-node: .ts files will be ignored!"
+                        )
                     );
-                } else {
                     resolve(
                         files.filter(f => f.indexOf(".ts") === -1)
                     );
