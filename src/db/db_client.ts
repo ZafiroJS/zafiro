@@ -13,7 +13,7 @@ export default class DbClient implements interfaces.DbClient {
         directoryName: string,
         getPath: (dirOrFile: string[]) => string
     ) {
-        await this._createConnection(
+        return await this._createConnection(
             dbLogging, database, directoryName, getPath
         );
     }

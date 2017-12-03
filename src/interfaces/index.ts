@@ -29,7 +29,7 @@ export interface DbClient {
         database: SupportedDatabases,
         directoryName: string,
         getPath: (dirOrFile: string[]) => string
-    ): Promise<void>;
+    ): Promise<Connection>;
 }
 
 export interface AccountRepository {
