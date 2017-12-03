@@ -25,6 +25,7 @@ export default class DbClient implements interfaces.DbClient {
         getPath: (dirOrFile: string[]) => string
     ) {
         try {
+            let connection: Connection;
             const dbHost = process.env.DATABASE_HOST;
             const dbPort = parseInt(process.env.DATABASE_PORT as any);
             const dbUser = process.env.DATABASE_USER;
@@ -41,7 +42,7 @@ export default class DbClient implements interfaces.DbClient {
                     `- database ${dbName}\n`
                 )
             );
-            const connection = await createConnection({
+            connection = await createConnection({
                 type: database as any,
                 host: dbHost,
                 port: dbPort,

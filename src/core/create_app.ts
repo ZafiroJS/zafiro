@@ -1,4 +1,6 @@
 import * as express from "express";
+import * as bodyParser from "body-parser";
+import * as helmet from "helmet";
 import { Container } from "inversify";
 import * as path from "path";
 import { InversifyExpressServer } from "inversify-express-utils";
@@ -81,9 +83,19 @@ export default async function createApp(
         AuthProvider
     );
 
-    if (options.expressConfig) {
-        server.setConfig(options.expressConfig);
-    }
+    server.setConfig((expressApp: express.Application) => {
+
+        // Set default config
+        expressApp.use(helmet());
+        expressApp.use(bodyParser.json());
+        expressApp.use(bodyParser.urlencoded({ extended: true }));
+
+        // Set custom config
+        if (options.expressConfig) {
+            options.expressConfig(expressApp);
+        }
+
+    });
 
     // Create and run Express app
     const app = server.build();
