@@ -39,16 +39,12 @@ export default async function createApp(
     // https://github.com/typeorm/typeorm/issues/592
     const dbClient = new DbClient();
 
-    const connection = await dbClient.createConnection(
+    await dbClient.createConnection(
         options.dbLogging || false,
         options.database,
         "entities",
         (dirOrFile: string[]) => path.join(__dirname, ...dir, ...dirOrFile)
     );
-
-    if (connection.isConnected === false) {
-        throw new Error("Connection should be ready!");
-    }
 
     // Create bindings for repositories
     await bindRepositories(

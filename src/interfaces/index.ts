@@ -1,4 +1,4 @@
-import { Connection, Repository, ConnectionOptions } from "typeorm";
+import { Repository, ConnectionOptions } from "typeorm";
 import * as express from "express";
 import { interfaces as inversifyInterfaces } from "inversify";
 import { interfaces as expressInterfaces } from "inversify-express-utils";
@@ -29,7 +29,7 @@ export interface DbClient {
         database: SupportedDatabases,
         directoryName: string,
         getPath: (dirOrFile: string[]) => string
-    ): Promise<Connection>;
+    ): Promise<void>;
 }
 
 export interface AccountRepository {

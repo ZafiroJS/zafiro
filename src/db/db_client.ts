@@ -13,7 +13,7 @@ export default class DbClient implements interfaces.DbClient {
         directoryName: string,
         getPath: (dirOrFile: string[]) => string
     ) {
-        return await this._createConnection(
+        await this._createConnection(
             dbLogging, database, directoryName, getPath
         );
     }
@@ -25,7 +25,6 @@ export default class DbClient implements interfaces.DbClient {
         getPath: (dirOrFile: string[]) => string
     ) {
         try {
-            let connection: Connection;
             const dbHost = process.env.DATABASE_HOST;
             const dbPort = parseInt(process.env.DATABASE_PORT as any);
             const dbUser = process.env.DATABASE_USER;
@@ -42,7 +41,7 @@ export default class DbClient implements interfaces.DbClient {
                     `- database ${dbName}\n`
                 )
             );
-            connection = await createConnection({
+            let connection = await createConnection({
                 type: database as any,
                 host: dbHost,
                 port: dbPort,
@@ -53,8 +52,9 @@ export default class DbClient implements interfaces.DbClient {
                 synchronize: true,
                 logging: dbLogging
             });
-            console.log(chalk.green("Success!"));
-            return connection;
+            if (connection.isOpen) {
+                console.log(chalk.green("Success!"));
+            }
 
         } catch (err) {
             console.log(chalk.red("Cannot connect to DB"));
