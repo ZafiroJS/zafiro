@@ -52,7 +52,7 @@ export default class DbClient implements interfaces.DbClient {
                 synchronize: true,
                 logging: dbLogging
             });
-            if (connection.isOpen) {
+            if (connection.isConnected) {
                 console.log(chalk.green("Success!"));
             }
 
