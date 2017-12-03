@@ -6,6 +6,7 @@ services:
 before_install:
 - npm install -g codeclimate-test-reporter
 before_script:
+- sleep 15
 - psql -c 'create database demo;' -U postgres
 - export DATABASE_USER=postgres
 - export DATABASE_PASSWORD=''
