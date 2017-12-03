@@ -11,6 +11,7 @@ git clone https://github.com/YOUR_USERNAME/zafiro.git
 2 Setup
 
 ```sh
+npm install
 npm run setup
 ```
 

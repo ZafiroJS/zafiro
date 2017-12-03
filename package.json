@@ -70,6 +70,6 @@
     "inversify": "4.5.2",
     "inversify-express-utils": "5.0.0",
     "pino": "4.10.2",
-    "typeorm": "0.1.6"
+    "typeorm": "0.1.7"
   }
 }
