@@ -115,6 +115,10 @@ gulp.task("mocha", function() {
         .pipe(mocha({
             ui: "bdd"
         }))
+        .on('error', (err) => {
+            gutil.log(err);
+            process.exit(1);
+        })
         .pipe(istanbul.writeReports());
 });
 
