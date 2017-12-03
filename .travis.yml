@@ -1,6 +1,8 @@
 language: node_js
 node_js:
 - stable
+services:
+- postgresql
 before_install:
 - npm install -g codeclimate-test-reporter
 before_script:
