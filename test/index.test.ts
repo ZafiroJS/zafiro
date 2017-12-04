@@ -3,7 +3,7 @@ import { expect } from "chai";
 import { getConnection } from "typeorm";
 import { createApp } from "../src/index";
 import { makeMiddleware } from "../dts/middleware/make_middleware";
-import { httpPost, httpGet } from "./test_utils";
+import { httpPost, httpGet, randomEmail } from "./test_utils";
 import * as interfaces from "./test_app/interfaces";
 
 describe("Zafiro", () => {
@@ -78,10 +78,12 @@ describe("Zafiro", () => {
             dir: ["..", "..", "test", "test_app"]
         });
 
+        const email = randomEmail();
+
         const expectedUser: interfaces.NewUser = {
             givenName: "Test Name",
             familyName: "Test Family Name",
-            email: "tes@test.com",
+            email: email,
             isBanned: false
         };
 
@@ -111,11 +113,14 @@ describe("Zafiro", () => {
 
         const actualUsers = httpGetResponse.body;
         expect(Array.isArray(actualUsers)).to.eql(true);
-        expect(typeof actualUsers[0].id).to.eql("number");
-        expect(actualUsers[0].givenName).to.eql(expectedUser.givenName);
-        expect(actualUsers[0].familyName).to.eql(expectedUser.familyName);
-        expect(actualUsers[0].email).to.eql(expectedUser.email);
-        expect(actualUsers[0].isBanned).to.eql(expectedUser.isBanned);
+
+        const maetchedUser = actualUsers.find((u: interfaces.User) => u.email === email);
+        expect(maetchedUser).not.to.eql(undefined);
+        expect(typeof maetchedUser.id).to.eql("number");
+        expect(maetchedUser.givenName).to.eql(expectedUser.givenName);
+        expect(maetchedUser.familyName).to.eql(expectedUser.familyName);
+        expect(maetchedUser.email).to.eql(expectedUser.email);
+        expect(maetchedUser.isBanned).to.eql(expectedUser.isBanned);
 
     });
 

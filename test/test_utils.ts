@@ -4,6 +4,12 @@ import { injectable } from "inversify";
 import { Repository } from "typeorm";
 import { interfaces as expressInterfaces } from "inversify-express-utils";
 
+export function randomEmail() {
+    const randomNumber = Math.floor(Math.random() * 100000) + 1;
+    const randomWithTime = new Date().getTime() + randomNumber;
+    return `tes_${randomWithTime}@test.com`;
+}
+
 export function httpGet(
     app: express.Application,
     url: string,

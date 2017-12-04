@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-@Entity({ schema: "demo" })
+@Entity()
 export default class User {
 
     @PrimaryGeneratedColumn()

@@ -1,4 +1,4 @@
-import { Connection, Repository, ConnectionOptions } from "typeorm";
+import { Repository, ConnectionOptions } from "typeorm";
 import * as express from "express";
 import { interfaces as inversifyInterfaces } from "inversify";
 import { interfaces as expressInterfaces } from "inversify-express-utils";

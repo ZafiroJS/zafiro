@@ -20,6 +20,8 @@ export default async function readdir(
                 reject(false);
             } else {
                 console.log(chalk.green("Success!"));
+                // Ignore source map files
+                files = files.filter(f => f.indexOf(".map") === -1);
                 // Some people use the same directory to store
                 // both the input (ts) and output (js) files
                 // used and generared by the TS compiler.
