@@ -9,6 +9,8 @@
         "jsx": "react",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
+        "noEmitHelpers": true,
+        "importHelpers": true,
         "noImplicitAny": true,
         "preserveConstEnums": true,
         "suppressImplicitAnyIndexErrors": true,
