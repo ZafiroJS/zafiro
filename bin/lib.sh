@@ -10,7 +10,7 @@ export DATABASE_DB=demo
 function run_db {
 
     echo "Pulling POSTGRES docker image";
-    docker pull postgres
+    docker pull postgres:9.5
 
     containerId=$(docker ps -a -q --filter ancestor=postgres)
 
