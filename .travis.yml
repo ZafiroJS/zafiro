@@ -7,8 +7,6 @@ before_install:
 - npm install -g codeclimate-test-reporter
 before_script:
 - psql -c 'CREATE DATABASE demo;' -U postgres
-- sleep 30
-- psql -c 'CREATE SCHEMA IF NOT EXISTS demo;' -U postgres
 - export DATABASE_USER=postgres
 - export DATABASE_PASSWORD=''
 - export DATABASE_HOST=localhost
