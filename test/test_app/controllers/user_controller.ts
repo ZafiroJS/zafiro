@@ -1,21 +1,9 @@
 import { inject } from "inversify";
-import { controller, httpGet, httpPost, BaseHttpController } from "inversify-express-utils";
+import { validate } from "zafiro-validators";
+import { controller, httpGet, httpPost, BaseHttpController, requestBody } from "inversify-express-utils";
 import { TYPE } from "../constants/types";
 import { Repository } from "typeorm";
-import { User } from "../interfaces";
-
-function validateUser(user: User) {
-    if (
-        user == null ||
-        user === undefined ||
-        typeof user.email !== "string" ||
-        typeof user.givenName !== "string" ||
-        typeof user.familyName !== "string" ||
-        typeof user.isBanned !== "boolean"
-    ) {
-        throw new Error("Invalid User!");
-    }
-}
+import User from "../entities/user";
 
 @controller("/api/v1/users")
 export default class UserController extends BaseHttpController {
@@ -28,10 +16,16 @@ export default class UserController extends BaseHttpController {
     }
 
     @httpPost("/")
-    private async post() {
-        const user = this.httpContext.request.body;
-        validateUser(user);
+    private async post(@requestBody() user: User) {
+        const result = validate(user, User);
+        if (result.error) {
+            return this.httpContext.response.status(400)
+                .json({
+                    error: `User ${result.error.message}`
+                });
+        }
         return await this._repository.save(user);
     }
 
 }
+

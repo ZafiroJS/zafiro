@@ -8,7 +8,7 @@ import * as interfaces from "./test_app/interfaces";
 
 describe("Zafiro", () => {
 
-    afterEach(async () => {
+    afterEach(() => {
         const connection = getConnection();
         connection.close();
     });
@@ -92,7 +92,6 @@ describe("Zafiro", () => {
             "/api/v1/users/",
             expectedUser,
             200,
-            [["x-auth-token", "fake_credentials"]],
             [["Content-Type", "application/json; charset=utf-8"]]
         );
 
@@ -107,7 +106,6 @@ describe("Zafiro", () => {
             result.app,
             "/api/v1/users/",
             200,
-            [["x-auth-token", "fake_credentials"]],
             [["Content-Type", "application/json; charset=utf-8"]]
         );
 
@@ -121,6 +119,36 @@ describe("Zafiro", () => {
         expect(maetchedUser.familyName).to.eql(expectedUser.familyName);
         expect(maetchedUser.email).to.eql(expectedUser.email);
         expect(maetchedUser.isBanned).to.eql(expectedUser.isBanned);
+
+    });
+
+    it("Should report validation issues as 400", async () => {
+
+        const result = await createApp({
+            database: "postgres",
+            dir: ["..", "..", "test", "test_app"]
+        });
+
+        const email = randomEmail();
+
+        const expectedUser = {
+            givenName: "Test Name",
+            familyName: "Test Family Name",
+            email: email,
+            isBanned: "xxxxx"
+        };
+
+        const httpPostResponse = await httpPost<interfaces.NewUser>(
+            result.app,
+            "/api/v1/users/",
+            expectedUser as any,
+            400,
+            [["Content-Type", "application/json; charset=utf-8"]]
+        );
+
+        expect(httpPostResponse.body.error).eq(
+            `User child "isBanned" fails because ["isBanned" must be a boolean]`
+        );
 
     });
 
