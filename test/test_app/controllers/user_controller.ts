@@ -3,7 +3,7 @@ import { validate } from "zafiro-validators";
 import { controller, httpGet, httpPost, BaseHttpController, requestBody } from "inversify-express-utils";
 import { TYPE } from "../constants/types";
 import { Repository } from "typeorm";
-import User from "../entities/User";
+import User from "../entities/user";
 
 @controller("/api/v1/users")
 export default class UserController extends BaseHttpController {
