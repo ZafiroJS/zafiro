@@ -23,7 +23,12 @@ export default async function readdirContents(
             console.log(chalk.green("Success!"));
             return entity.default;
         } catch (err) {
-            console.log(chalk.red(`Cannot load ${entityPath}!`));
+            console.log(
+                chalk.red(
+                    ERROR_MSG.cannot_read_path(entityPath)
+                )
+            );
+            console.log(err);
         }
     });
 }
