@@ -19,11 +19,10 @@ export default class UserController extends BaseHttpController {
     private async post(@requestBody() user: User) {
         const result = validate(user, User);
         if (result.error) {
-            this.httpContext.response.status(400)
-                .send(
-                    "Bad Request: " +
-                    `Invalid User! ${result.error.message}`
-                );
+            return this.httpContext.response.status(400)
+                .json({
+                    error: `User ${result.error.message}`
+                });
         }
         return await this._repository.save(user);
     }
