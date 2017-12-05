@@ -61,7 +61,8 @@
     "supertest": "3.0.0",
     "ts-node": "3.3.0",
     "tslint": "5.8.0",
-    "typescript": "2.6.2"
+    "typescript": "2.6.2",
+    "zafiro-validators": "1.1.0"
   },
   "dependencies": {
     "body-parser": "1.18.2",
