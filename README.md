@@ -4,10 +4,10 @@
 
 [![Join the chat at https://gitter.im/inversify/InversifyJS](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/inversify/InversifyJS?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![npm version](https://badge.fury.io/js/zafiro.svg)](http://badge.fury.io/js/zafiro)
-[![Build Status](https://travis-ci.org/remojansen/zafiro.svg?branch=master)](https://travis-ci.org/remojansen/zafiro)
-[![Dependencies](https://david-dm.org/remojansen/zafiro.svg)](https://david-dm.org/remojansen/zafiro#info=dependencies)
-[![img](https://david-dm.org/remojansen/zafiro/dev-status.svg)](https://david-dm.org/remojansen/zafiro/#info=devDependencies)
-[![Known Vulnerabilities](https://snyk.io/test/github/remojansen/zafiro/badge.svg)](https://snyk.io/test/github/remojansen/zafiro)
+[![Build Status](https://travis-ci.org/ZafiroJS/zafiro.svg?branch=master)](https://travis-ci.org/ZafiroJS/zafiro)
+[![Dependencies](https://david-dm.org/ZafiroJS/zafiro.svg)](https://david-dm.org/ZafiroJS/zafiro#info=dependencies)
+[![img](https://david-dm.org/ZafiroJS/zafiro/dev-status.svg)](https://david-dm.org/ZafiroJS/zafiro/#info=devDependencies)
+[![Known Vulnerabilities](https://snyk.io/test/github/ZafiroJS/zafiro/badge.svg)](https://snyk.io/test/github/ZafiroJS/zafiro)
 [![Twitter Follow](https://img.shields.io/twitter/follow/InversifyJS.svg?style=flat&maxAge=86400)](https://twitter.com/inversifyjs)
 
 :warning: :construction: This library is under construction :construction: :warning:
@@ -184,4 +184,4 @@ I plan to continue working hard to:
 
 ## Example Application
 
-An example application is available at [zafiro-realworld-example](https://github.com/remojansen/zafiro-realworld-example).
+An example application is available at [zafiro-realworld-example](https://github.com/ZafiroJS/zafiro-realworld-example).
