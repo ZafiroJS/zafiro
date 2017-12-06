@@ -9,7 +9,7 @@ export default async function readdir(
 ) {
     return new Promise<string[]>((resolve, reject) => {
         const path = getPath([directoryName]);
-        logger.info(`Reading: ${path}`);
+        logger.info("Reading", { path });
         fs.readdir(path, (err, files) => {
             if (err) {
                 logger.fatal(ERROR_MSG.cannot_read_path(path), err);
@@ -30,10 +30,8 @@ export default async function readdir(
                 const contiansTsFiles = files.find(f => f.indexOf(".ts") !== -1) !== undefined;
                 if (contiansJsFiles && contiansTsFiles) {
                     const filteredFiles = files.filter(f => f.indexOf(".ts") === -1);
-                    logger.info("Folder contains both .js and .ts files:");
-                    logger.info(JSON.stringify(files));
-                    logger.info("All .ts files will be ignored:");
-                    logger.info(JSON.stringify(filteredFiles));
+                    logger.info("Folder contains both .js and .ts files:", { files });
+                    logger.info("All .ts files will be ignored:", { files: filteredFiles });
                     resolve(filteredFiles);
                 }
                 resolve(files);

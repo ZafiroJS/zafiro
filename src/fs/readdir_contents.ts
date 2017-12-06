@@ -6,13 +6,13 @@ import { UniversalLogger } from "../interfaces";
 export default async function readdirContents(
     logger: UniversalLogger,
     directoryName: string,
-    getPath: (dirOrFile: string[]) => string
+    getPath: (dirOrFile: string[]) => string,
 ) {
     const files = await readdir(logger, directoryName, getPath);
     return files.map((fileName) => {
         const entityPath = getPath([directoryName, fileName]);
         try {
-            logger.info(`Loading: ${entityPath}`);
+            logger.info("Loading", { path: entityPath });
             const entity = require(entityPath);
             if (entity.default === undefined) {
                 logger.fatal(
@@ -23,6 +23,7 @@ export default async function readdirContents(
             return entity.default;
         } catch (err) {
             logger.fatal(ERROR_MSG.cannot_read_path(entityPath), err);
+            throw err;
         }
     });
 }

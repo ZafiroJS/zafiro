@@ -19,7 +19,7 @@ export default async function bindRepositories(
 
     repositories.forEach((repository, i) => {
         const repositoryType = entityTypes[i];
-        logger.info(`Creating repository binding with TYPE ${repositoryType.toString()}`);
+        logger.info("Creating Repository type binding", { ID: repositoryType.toString() });
         container.bind<Repository<any>>(repositoryType).toConstantValue(repository);
         logger.success("Success!");
     });

@@ -74,9 +74,9 @@ describe("Zafiro", () => {
     it("Should be able to perform POST and GET http requests", async () => {
 
         const result = await createApp({
+            dbLogging: true,
             database: "postgres",
-            dir: ["..", "..", "test", "test_app"],
-            dbLogging: true
+            dir: ["..", "..", "test", "test_app"]
         });
 
         const email = randomEmail();

@@ -12,11 +12,12 @@ export type UniversalLoggerConstructor = { new(): UniversalLogger };
 export interface AppOptions {
     database: SupportedDatabases;
     dbLogging?: boolean;
-    loggerConfig?: Pino.LoggerOptions;
-    loggerPrettyConfig?: Pino.PrettyOptions;
-    containerModules?: inversifyInterfaces.ContainerModule[];
+    prettyLogs?: boolean;
+    loggerOptions?: Pino.LoggerOptions;
+    prettyOptions?: Pino.PrettyOptions;
     dir?: string[];
     container?: inversifyInterfaces.Container;
+    containerModules?: inversifyInterfaces.ContainerModule[];
     customRouter?: express.Router;
     routingConfig?: expressInterfaces.RoutingConfig;
     customApp?: express.Application;

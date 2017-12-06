@@ -30,8 +30,9 @@ export default async function createApp(
 
     // Create Logger
     const logger = new Logger(
-        options.loggerConfig,
-        options.loggerPrettyConfig
+        options.prettyLogs || true,
+        options.loggerOptions,
+        options.prettyOptions
     );
 
     // Declare app bindings
@@ -49,7 +50,7 @@ export default async function createApp(
     const dbClient = new DbClient();
 
     await dbClient.createConnection(
-        options.dbLogging || false,
+        options.dbLogging === true,
         logger,
         options.database,
         "entities",

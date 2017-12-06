@@ -31,37 +31,36 @@ export default class DbClient implements interfaces.DbClient {
         getPath: (dirOrFile: string[]) => string
     ) {
         try {
-            const dbHost = process.env.DATABASE_HOST;
-            const dbPort = parseInt(process.env.DATABASE_PORT as any);
-            const dbUser = process.env.DATABASE_USER;
-            const dbPassword = process.env.DATABASE_PASSWORD;
-            const dbName = process.env.DATABASE_DB;
+
+            // Get entities paths
             const paths = await this._getEntityPaths(
                 logger,
                 directoryName,
                 getPath
             );
-            logger.info(
-                "Trying to connect to DB " +
-                `host:${dbHost} ` +
-                `port:${dbPort} ` +
-                `user:${dbUser} ` +
-                `password:${dbPassword} ` +
-                `database:${dbName} ` +
-                `logging:${dbLogging} `
-            );
-            let connection = await createConnection({
+
+            // Connect to DB
+            const env = this._getEnv();
+            logger.info("Trying to connect to DB ", env);
+
+            const opt = {
                 type: database as any,
-                host: dbHost,
-                port: dbPort,
-                username: dbUser,
-                password: dbPassword,
-                database: dbName,
+                host: env.dbHost,
+                port: env.dbPort,
+                username: env.dbUser,
+                password: env.dbPassword,
+                database: env.dbName,
                 entities: paths,
-                synchronize: true,
-                logging: dbLogging // ,
-                // logger: logger
-            });
+                synchronize: true
+            };
+
+            if (dbLogging) {
+                (opt as any)["logging"] = true;
+                (opt as any)["logger"] = logger;
+            }
+
+            let connection = await createConnection(opt);
+
             if (connection.isConnected) {
                 logger.success("Success!");
             }
@@ -70,6 +69,16 @@ export default class DbClient implements interfaces.DbClient {
             logger.fatal("Cannot connect to DB", err);
             throw err;
         }
+    }
+
+    private _getEnv() {
+        return {
+            dbHost: process.env.DATABASE_HOST,
+            dbPort: parseInt(process.env.DATABASE_PORT as any),
+            dbUser: process.env.DATABASE_USER,
+            dbPassword: process.env.DATABASE_PASSWORD,
+            dbName: process.env.DATABASE_DB
+        };
     }
 
     private async _getEntityPaths(
