@@ -1,34 +1,28 @@
 import * as fs from "fs";
-import chalk from "chalk";
 import { ERROR_MSG } from "../constants/error_msg";
 import readdir from "./readdir";
+import { UniversalLogger } from "../interfaces";
 
 export default async function readdirContents(
+    logger: UniversalLogger,
     directoryName: string,
     getPath: (dirOrFile: string[]) => string
 ) {
-    const files = await readdir(directoryName, getPath);
+    const files = await readdir(logger, directoryName, getPath);
     return files.map((fileName) => {
         const entityPath = getPath([directoryName, fileName]);
         try {
-            console.log(chalk.cyan(`Loading: ${entityPath}`));
+            logger.info(`Loading: ${entityPath}`);
             const entity = require(entityPath);
             if (entity.default === undefined) {
-                console.log(
-                    chalk.red(
-                        ERROR_MSG.entity_modules_must_have_a_default_export(entityPath)
-                    )
+                logger.fatal(
+                    ERROR_MSG.entity_modules_must_have_a_default_export(entityPath)
                 );
             }
-            console.log(chalk.green("Success!"));
+            logger.success("Success!");
             return entity.default;
         } catch (err) {
-            console.log(
-                chalk.red(
-                    ERROR_MSG.cannot_read_path(entityPath)
-                )
-            );
-            console.log(err);
+            logger.fatal(ERROR_MSG.cannot_read_path(entityPath), err);
         }
     });
 }

@@ -1,4 +1,4 @@
-import { Repository, ConnectionOptions } from "typeorm";
+import { Repository, ConnectionOptions, Logger as DbLogger } from "typeorm";
 import * as express from "express";
 import * as Pino from "pino";
 import { interfaces as inversifyInterfaces } from "inversify";
@@ -6,11 +6,14 @@ import { interfaces as expressInterfaces } from "inversify-express-utils";
 import * as interfaces from "../interfaces";
 
 export type SupportedDatabases = ConnectionOptions["type"];
+export type UniversalLogger = interfaces.Logger & DbLogger;
+export type UniversalLoggerConstructor = { new(): UniversalLogger };
 
 export interface AppOptions {
     database: SupportedDatabases;
     dbLogging?: boolean;
     loggerConfig?: Pino.LoggerOptions;
+    loggerPrettyConfig?: Pino.PrettyOptions;
     containerModules?: inversifyInterfaces.ContainerModule[];
     dir?: string[];
     container?: inversifyInterfaces.Container;
@@ -28,6 +31,7 @@ export interface Result {
 export interface DbClient {
     createConnection(
         dbLogging: boolean,
+        logger: UniversalLogger,
         database: SupportedDatabases,
         directoryName: string,
         getPath: (dirOrFile: string[]) => string
@@ -47,6 +51,7 @@ export type MiddlewareFactory = (logger: Logger) => (
 
 export interface Logger {
     info(msg: string, ...args: any[]): void;
+    fatal(msg: string, ...args: any[]): void;
     error(msg: string, ...args: any[]): void;
     trace(msg: string, ...args: any[]): void;
     debug(msg: string, ...args: any[]): void;

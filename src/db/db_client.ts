@@ -1,25 +1,31 @@
-import { createConnection, Connection } from "typeorm";
+import { createConnection, Connection, Logger as DbLogger } from "typeorm";
 import { injectable, inject } from "inversify";
-import chalk from "chalk";
 import * as interfaces from "../interfaces";
 import readdir from "../fs/readdir";
+import { UniversalLogger } from "../interfaces";
 
 @injectable()
 export default class DbClient implements interfaces.DbClient {
 
     public async createConnection(
         dbLogging: boolean,
+        logger: UniversalLogger,
         database: interfaces.SupportedDatabases,
         directoryName: string,
         getPath: (dirOrFile: string[]) => string
     ) {
         await this._createConnection(
-            dbLogging, database, directoryName, getPath
+            dbLogging,
+            logger,
+            database,
+            directoryName,
+            getPath
         );
     }
 
     private async _createConnection(
         dbLogging: boolean,
+        logger: UniversalLogger,
         database: interfaces.SupportedDatabases,
         directoryName: string,
         getPath: (dirOrFile: string[]) => string
@@ -30,16 +36,19 @@ export default class DbClient implements interfaces.DbClient {
             const dbUser = process.env.DATABASE_USER;
             const dbPassword = process.env.DATABASE_PASSWORD;
             const dbName = process.env.DATABASE_DB;
-            const paths = await this._getEntityPaths(directoryName, getPath);
-            console.log(
-                chalk.cyan(
-                    "Trying to connect to DB: \n" +
-                    `- host ${dbHost}\n` +
-                    `- port ${dbPort}\n` +
-                    `- user ${dbUser}\n` +
-                    `- password ${dbPassword}\n` +
-                    `- database ${dbName}\n`
-                )
+            const paths = await this._getEntityPaths(
+                logger,
+                directoryName,
+                getPath
+            );
+            logger.info(
+                "Trying to connect to DB " +
+                `host:${dbHost} ` +
+                `port:${dbPort} ` +
+                `user:${dbUser} ` +
+                `password:${dbPassword} ` +
+                `database:${dbName} ` +
+                `logging:${dbLogging} `
             );
             let connection = await createConnection({
                 type: database as any,
@@ -50,24 +59,25 @@ export default class DbClient implements interfaces.DbClient {
                 database: dbName,
                 entities: paths,
                 synchronize: true,
-                logging: dbLogging
+                logging: dbLogging // ,
+                // logger: logger
             });
             if (connection.isConnected) {
-                console.log(chalk.green("Success!"));
+                logger.success("Success!");
             }
 
         } catch (err) {
-            console.log(chalk.red("Cannot connect to DB"));
-            console.log(err);
+            logger.fatal("Cannot connect to DB", err);
             throw err;
         }
     }
 
     private async _getEntityPaths(
+        logger: UniversalLogger,
         directoryName: string,
         getPath: (dirOrFile: string[]) => string
     ) {
-        const files = await readdir(directoryName, getPath);
+        const files = await readdir(logger, directoryName, getPath);
         return files.map(fileName => getPath([directoryName, fileName]));
     }
 

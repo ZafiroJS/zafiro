@@ -2,7 +2,7 @@ import "./env";
 import { expect } from "chai";
 import { getConnection } from "typeorm";
 import { createApp } from "../src/index";
-import { makeMiddleware } from "../dts/middleware/make_middleware";
+import { makeMiddleware } from "../src/middleware/make_middleware";
 import { httpPost, httpGet, randomEmail } from "./test_utils";
 import * as interfaces from "./test_app/interfaces";
 
@@ -75,7 +75,8 @@ describe("Zafiro", () => {
 
         const result = await createApp({
             database: "postgres",
-            dir: ["..", "..", "test", "test_app"]
+            dir: ["..", "..", "test", "test_app"],
+            dbLogging: true
         });
 
         const email = randomEmail();
