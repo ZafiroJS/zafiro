@@ -1,6 +1,6 @@
 {
   "name": "zafiro",
-  "version": "1.0.0-alpha.11",
+  "version": "1.0.0-alpha.12",
   "description": "A lightweight web framework for Node.js apps powered by InversifyJS, TypeORM and Express",
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",

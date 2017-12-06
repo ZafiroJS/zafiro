@@ -1,5 +1,6 @@
 import { Repository, ConnectionOptions } from "typeorm";
 import * as express from "express";
+import * as Pino from "pino";
 import { interfaces as inversifyInterfaces } from "inversify";
 import { interfaces as expressInterfaces } from "inversify-express-utils";
 import * as interfaces from "../interfaces";
@@ -9,6 +10,7 @@ export type SupportedDatabases = ConnectionOptions["type"];
 export interface AppOptions {
     database: SupportedDatabases;
     dbLogging?: boolean;
+    loggerConfig?: Pino.LoggerOptions;
     containerModules?: inversifyInterfaces.ContainerModule[];
     dir?: string[];
     container?: inversifyInterfaces.Container;
@@ -46,6 +48,7 @@ export type MiddlewareFactory = (logger: Logger) => (
 export interface Logger {
     info(msg: string, ...args: any[]): void;
     error(msg: string, ...args: any[]): void;
+    trace(msg: string, ...args: any[]): void;
     debug(msg: string, ...args: any[]): void;
     warn(msg: string, ...args: any[]): void;
     success(msg: string, ...args: any[]): void;

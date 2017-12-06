@@ -12,6 +12,7 @@ import { ZAFIRO_TYPE } from "../constants/types";
 import { AuthProvider } from "../auth/auth_provider";
 import { principalFactory } from "../auth/principal_factory";
 import DbClient from "../db/db_client";
+import makeLogger from "../logging/make_logger";
 
 export default async function createApp(
     options: interfaces.AppOptions
@@ -27,8 +28,13 @@ export default async function createApp(
     // Create and configure IoC container
     const container = options.container || new Container();
 
+    // Create Logger
+    const Logger = makeLogger(options.loggerConfig);
+
     // Declare app bindings
     container.load(coreBindings);
+    container.bind<interfaces.Logger>(ZAFIRO_TYPE.Logger)
+             .to(Logger);
 
     if (options.containerModules) {
         const modules = options.containerModules;
