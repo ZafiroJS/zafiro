@@ -70,7 +70,7 @@
     "express": "4.16.2",
     "helmet": "3.9.0",
     "inversify": "4.6.0",
-    "inversify-express-utils": "5.0.0",
+    "inversify-express-utils": "5.1.0",
     "pino": "4.10.2",
     "tslib": "1.8.0",
     "typeorm": "0.1.7"
