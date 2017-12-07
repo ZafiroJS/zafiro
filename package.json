@@ -72,7 +72,7 @@
     "inversify": "4.6.0",
     "inversify-express-utils": "5.0.0",
     "pino": "4.10.2",
-    "tslib": "1.8.0",
+    "tslib": "1.8.1",
     "typeorm": "0.1.7"
   }
 }
