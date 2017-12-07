@@ -1,5 +1,6 @@
 import * as express from "express";
 import { BaseMiddleware, interfaces } from "inversify-express-utils";
+import { makeMiddleware } from "../middleware/make_middleware";
 import { Logger, MiddlewareFactory } from "../interfaces";
 
 export const forbidden = (res: express.Response) => {
@@ -38,3 +39,5 @@ export const isInRoleMiddlewareCb = (role: string) => (logger: Logger) => async 
         unauthorized(httpContext.response);
     }
 };
+
+export const IsAuthenticatedMiddleware = makeMiddleware(isAuthenticatedMiddlewareCb);

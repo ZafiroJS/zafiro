@@ -1,6 +1,6 @@
 {
   "name": "zafiro",
-  "version": "1.0.0-alpha.11",
+  "version": "1.0.0-alpha.12",
   "description": "A lightweight web framework for Node.js apps powered by InversifyJS, TypeORM and Express",
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
@@ -65,13 +65,14 @@
     "zafiro-validators": "1.1.0"
   },
   "dependencies": {
+    "@types/prettyjson": "0.0.28",
     "body-parser": "1.18.2",
-    "chalk": "2.3.0",
     "express": "4.16.2",
     "helmet": "3.9.0",
     "inversify": "4.6.0",
-    "inversify-express-utils": "5.0.0",
+    "inversify-express-utils": "5.1.1",
     "pino": "4.10.2",
+    "prettyjson": "1.2.1",
     "tslib": "1.8.1",
     "typeorm": "0.1.7"
   }

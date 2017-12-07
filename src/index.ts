@@ -3,9 +3,13 @@ import { principalFactory } from "./auth/principal_factory";
 import { isAuthenticated } from "./auth/is_authenticated";
 import { AccountRepository, Logger } from "./interfaces";
 import { makeMiddleware } from "./middleware/make_middleware";
-import { isInRoleMiddlewareCb, isAuthenticatedMiddlewareCb } from "./auth/middleware_utils";
 import { ZAFIRO_TYPE } from "./constants/types";
 import * as interfaces from "./interfaces";
+import {
+    IsAuthenticatedMiddleware,
+    isInRoleMiddlewareCb,
+    isAuthenticatedMiddlewareCb
+} from "./auth/middleware_utils";
 
 export {
     interfaces,
@@ -17,5 +21,6 @@ export {
     Logger,
     makeMiddleware,
     isInRoleMiddlewareCb,
-    isAuthenticatedMiddlewareCb
+    isAuthenticatedMiddlewareCb,
+    IsAuthenticatedMiddleware
 };

@@ -1,25 +1,21 @@
 import * as fs from "fs";
-import chalk from "chalk";
 import { ERROR_MSG } from "../constants/error_msg";
+import { UniversalLogger } from "../interfaces";
 
 export default async function readdir(
+    logger: UniversalLogger,
     directoryName: string,
     getPath: (dirOrFile: string[]) => string
 ) {
     return new Promise<string[]>((resolve, reject) => {
         const path = getPath([directoryName]);
-        console.log(chalk.cyan(`Reading: ${path}`));
+        logger.info("Reading", { path });
         fs.readdir(path, (err, files) => {
             if (err) {
-                console.log(
-                    chalk.red(
-                        ERROR_MSG.cannot_read_path(path)
-                    )
-                );
-                console.log(err);
+                logger.fatal(ERROR_MSG.cannot_read_path(path), err);
                 reject(false);
             } else {
-                console.log(chalk.green("Success!"));
+                logger.success("Success!");
                 // Ignore source map files
                 files = files.filter(f => f.indexOf(".map") === -1);
                 // Some people use the same directory to store
@@ -34,10 +30,8 @@ export default async function readdir(
                 const contiansTsFiles = files.find(f => f.indexOf(".ts") !== -1) !== undefined;
                 if (contiansJsFiles && contiansTsFiles) {
                     const filteredFiles = files.filter(f => f.indexOf(".ts") === -1);
-                    console.log(chalk.yellow("Folder contains both .js and .ts files:"));
-                    console.log(chalk.yellow(JSON.stringify(files)));
-                    console.log(chalk.yellow("All .ts files will be ignored:"));
-                    console.log(chalk.yellow(JSON.stringify(filteredFiles)));
+                    logger.info("Folder contains both .js and .ts files:", { files });
+                    logger.info("All .ts files will be ignored:", { files: filteredFiles });
                     resolve(filteredFiles);
                 }
                 resolve(files);

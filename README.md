@@ -50,12 +50,12 @@ import { CustomAccountRepository } from "./repositories/account_repository";
         app.listen(
             3000,
             () => console.log(
-                chalk.green("Example app listening on port 3000!")
+                "Example app listening on port 3000!"
             )
         );
 
     } catch (e) {
-        console.log(chalk.redBright(e.message));
+        console.log(e.message);
     }
 
 })();

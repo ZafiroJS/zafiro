@@ -3,7 +3,7 @@ import * as bodyParser from "body-parser";
 import * as helmet from "helmet";
 import { Container } from "inversify";
 import * as path from "path";
-import { InversifyExpressServer } from "inversify-express-utils";
+import { InversifyExpressServer, getRouteInfo } from "inversify-express-utils";
 import { coreBindings }  from "../config/ioc_config";
 import bindControllers from "../ioc/bind_controllers";
 import bindRepositories from "../ioc/bind_repositories";
@@ -12,6 +12,7 @@ import { ZAFIRO_TYPE } from "../constants/types";
 import { AuthProvider } from "../auth/auth_provider";
 import { principalFactory } from "../auth/principal_factory";
 import DbClient from "../db/db_client";
+import Logger from "../logging/logger";
 
 export default async function createApp(
     options: interfaces.AppOptions
@@ -27,8 +28,17 @@ export default async function createApp(
     // Create and configure IoC container
     const container = options.container || new Container();
 
+    // Create Logger
+    const logger = new Logger(
+        options.prettyLogs || true,
+        options.loggerOptions,
+        options.prettyOptions
+    );
+
     // Declare app bindings
     container.load(coreBindings);
+    container.bind<interfaces.Logger>(ZAFIRO_TYPE.Logger)
+             .toConstantValue(logger);
 
     if (options.containerModules) {
         const modules = options.containerModules;
@@ -40,7 +50,8 @@ export default async function createApp(
     const dbClient = new DbClient();
 
     await dbClient.createConnection(
-        options.dbLogging || false,
+        options.dbLogging === true,
+        logger,
         options.database,
         "entities",
         (dirOrFile: string[]) => path.join(__dirname, ...dir, ...dirOrFile)
@@ -48,6 +59,7 @@ export default async function createApp(
 
     // Create bindings for repositories
     await bindRepositories(
+        logger,
         container,
         "entities",
         (dirOrFile: string[]) => path.join(__dirname, ...dir, ...dirOrFile)
@@ -55,6 +67,7 @@ export default async function createApp(
 
     // Create bindings for controllers
     await bindControllers(
+        logger,
         "controllers",
         (dirOrFile: string[]) => path.join(__dirname, ...dir, ...dirOrFile)
     );
@@ -99,6 +112,9 @@ export default async function createApp(
 
     // Create and run Express app
     const app = server.build();
+
+    const routes = getRouteInfo(container);
+    logger.info("The following routes have been detected", { routes: routes });
 
     const result: interfaces.Result = { app };
 

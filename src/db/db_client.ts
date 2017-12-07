@@ -1,73 +1,92 @@
-import { createConnection, Connection } from "typeorm";
+import { createConnection, Connection, Logger as DbLogger } from "typeorm";
 import { injectable, inject } from "inversify";
-import chalk from "chalk";
 import * as interfaces from "../interfaces";
 import readdir from "../fs/readdir";
+import { UniversalLogger } from "../interfaces";
 
 @injectable()
 export default class DbClient implements interfaces.DbClient {
 
     public async createConnection(
         dbLogging: boolean,
+        logger: UniversalLogger,
         database: interfaces.SupportedDatabases,
         directoryName: string,
         getPath: (dirOrFile: string[]) => string
     ) {
         await this._createConnection(
-            dbLogging, database, directoryName, getPath
+            dbLogging,
+            logger,
+            database,
+            directoryName,
+            getPath
         );
     }
 
     private async _createConnection(
         dbLogging: boolean,
+        logger: UniversalLogger,
         database: interfaces.SupportedDatabases,
         directoryName: string,
         getPath: (dirOrFile: string[]) => string
     ) {
         try {
-            const dbHost = process.env.DATABASE_HOST;
-            const dbPort = parseInt(process.env.DATABASE_PORT as any);
-            const dbUser = process.env.DATABASE_USER;
-            const dbPassword = process.env.DATABASE_PASSWORD;
-            const dbName = process.env.DATABASE_DB;
-            const paths = await this._getEntityPaths(directoryName, getPath);
-            console.log(
-                chalk.cyan(
-                    "Trying to connect to DB: \n" +
-                    `- host ${dbHost}\n` +
-                    `- port ${dbPort}\n` +
-                    `- user ${dbUser}\n` +
-                    `- password ${dbPassword}\n` +
-                    `- database ${dbName}\n`
-                )
+
+            // Get entities paths
+            const paths = await this._getEntityPaths(
+                logger,
+                directoryName,
+                getPath
             );
-            let connection = await createConnection({
+
+            // Connect to DB
+            const env = this._getEnv();
+            logger.info("Trying to connect to DB ", env);
+
+            const opt = {
                 type: database as any,
-                host: dbHost,
-                port: dbPort,
-                username: dbUser,
-                password: dbPassword,
-                database: dbName,
+                host: env.dbHost,
+                port: env.dbPort,
+                username: env.dbUser,
+                password: env.dbPassword,
+                database: env.dbName,
                 entities: paths,
-                synchronize: true,
-                logging: dbLogging
-            });
+                synchronize: true
+            };
+
+            if (dbLogging) {
+                (opt as any)["logging"] = true;
+                // (opt as any)["logger"] = logger;
+            }
+
+            let connection = await createConnection(opt);
+
             if (connection.isConnected) {
-                console.log(chalk.green("Success!"));
+                logger.success("Success!");
             }
 
         } catch (err) {
-            console.log(chalk.red("Cannot connect to DB"));
-            console.log(err);
+            logger.fatal("Cannot connect to DB", err);
             throw err;
         }
     }
 
+    private _getEnv() {
+        return {
+            dbHost: process.env.DATABASE_HOST,
+            dbPort: parseInt(process.env.DATABASE_PORT as any),
+            dbUser: process.env.DATABASE_USER,
+            dbPassword: process.env.DATABASE_PASSWORD,
+            dbName: process.env.DATABASE_DB
+        };
+    }
+
     private async _getEntityPaths(
+        logger: UniversalLogger,
         directoryName: string,
         getPath: (dirOrFile: string[]) => string
     ) {
-        const files = await readdir(directoryName, getPath);
+        const files = await readdir(logger, directoryName, getPath);
         return files.map(fileName => getPath([directoryName, fileName]));
     }
 
