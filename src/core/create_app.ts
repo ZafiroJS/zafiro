@@ -3,7 +3,7 @@ import * as bodyParser from "body-parser";
 import * as helmet from "helmet";
 import { Container } from "inversify";
 import * as path from "path";
-import { InversifyExpressServer } from "inversify-express-utils";
+import { InversifyExpressServer, getRouteInfo } from "inversify-express-utils";
 import { coreBindings }  from "../config/ioc_config";
 import bindControllers from "../ioc/bind_controllers";
 import bindRepositories from "../ioc/bind_repositories";
@@ -112,6 +112,9 @@ export default async function createApp(
 
     // Create and run Express app
     const app = server.build();
+
+    const routes = getRouteInfo(container);
+    logger.info("The following routes have been detected", { routes: routes });
 
     const result: interfaces.Result = { app };
 

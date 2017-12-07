@@ -56,7 +56,7 @@ export default class DbClient implements interfaces.DbClient {
 
             if (dbLogging) {
                 (opt as any)["logging"] = true;
-                (opt as any)["logger"] = logger;
+                // (opt as any)["logger"] = logger;
             }
 
             let connection = await createConnection(opt);
