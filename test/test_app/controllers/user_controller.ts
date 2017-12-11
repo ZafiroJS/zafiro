@@ -53,5 +53,11 @@ export default class UserController extends BaseHttpController {
         return await this._repository.save(user);
     }
 
+    @httpDelete("/:id")
+    private delete( @requestParam("id") userId: string, @response() res: express.Response) {
+        this._repository.deleteById(userId);
+        res.send();
+    }
+
 }
 
