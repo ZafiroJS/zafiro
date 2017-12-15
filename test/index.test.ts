@@ -118,14 +118,6 @@ describe("Zafiro", () => {
     });
 
     it("Should be able to perform a PUT request", async () => {
-        const httpGetResponse = await httpGet(
-            result.app,
-            "/api/v1/users/",
-            200,
-            [["Content-Type", "application/json; charset=utf-8"]]
-        );
-
-        const actualUsers = httpGetResponse.body;
 
         let updatedUser: interfaces.User = actualUser;
         updatedUser.familyName = "updated";
