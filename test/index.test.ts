@@ -3,10 +3,17 @@ import { expect } from "chai";
 import { getConnection } from "typeorm";
 import { createApp } from "../src/index";
 import { makeMiddleware } from "../src/middleware/make_middleware";
-import { httpPost, httpGet, randomEmail } from "./test_utils";
+import { httpPost, httpGet, randomEmail, httpPut, httpDelete } from "./test_utils";
 import * as interfaces from "./test_app/interfaces";
 
 describe("Zafiro", () => {
+    let result: any;
+    beforeEach(async () => {
+        result = await createApp({
+            database: "postgres",
+            dir: ["..", "..", "test", "test_app"]
+        });
+    });
 
     afterEach(() => {
         const connection = getConnection();
@@ -16,10 +23,6 @@ describe("Zafiro", () => {
     it("Should not be possible to re-use a db conenction", async () => {
 
         async function createAnotherConnection() {
-            const result1 = await createApp({
-                database: "postgres",
-                dir: ["..", "..", "test", "test_app"]
-            });
             const result2 = await createApp({
                 database: "postgres",
                 dir: ["..", "..", "test", "test_app"]
@@ -28,8 +31,8 @@ describe("Zafiro", () => {
         }
 
         const expectedMsg = "Cannot create a new connection named \"default\", " +
-                    "because connection with such name already exist and " +
-                    "it now has an active connection session.";
+            "because connection with such name already exist and " +
+            "it now has an active connection session.";
 
         try {
             const response = await createAnotherConnection();
@@ -48,17 +51,13 @@ describe("Zafiro", () => {
     it("Should be able to close previous db conenction", async () => {
 
         async function createMultipleApps() {
-            const result1 = await createApp({
-                database: "postgres",
-                dir: ["..", "..", "test", "test_app"]
-            });
             const connection = getConnection();
             connection.close();
             const result2 = await createApp({
                 database: "postgres",
                 dir: ["..", "..", "test", "test_app"]
             });
-            return { result1, result2 };
+            return { result, result2 };
         }
 
         try {
@@ -71,12 +70,8 @@ describe("Zafiro", () => {
 
     });
 
+    let actualUser: interfaces.User;
     it("Should be able to perform POST and GET http requests", async () => {
-
-        const result = await createApp({
-            database: "postgres",
-            dir: ["..", "..", "test", "test_app"]
-        });
 
         const email = randomEmail();
 
@@ -95,7 +90,7 @@ describe("Zafiro", () => {
             [["Content-Type", "application/json; charset=utf-8"]]
         );
 
-        const actualUser = httpPostResponse.body;
+        actualUser = httpPostResponse.body;
         expect(typeof actualUser.id).to.eql("number");
         expect(actualUser.givenName).to.eql(expectedUser.givenName);
         expect(actualUser.familyName).to.eql(expectedUser.familyName);
@@ -122,12 +117,40 @@ describe("Zafiro", () => {
 
     });
 
-    it("Should report validation issues as 400", async () => {
+    it("Should be able to perform a PUT request", async () => {
+        const httpGetResponse = await httpGet(
+            result.app,
+            "/api/v1/users/",
+            200,
+            [["Content-Type", "application/json; charset=utf-8"]]
+        );
 
-        const result = await createApp({
-            database: "postgres",
-            dir: ["..", "..", "test", "test_app"]
-        });
+        const actualUsers = httpGetResponse.body;
+
+        let updatedUser: interfaces.User = actualUser;
+        updatedUser.familyName = "updated";
+        const httpPutResponse = await httpPut<Partial<interfaces.User>>(
+            result.app,
+            `/api/v1/users/`,
+            updatedUser,
+            200,
+            [["x-auth-token", "fake_credentials"]],
+            [["Content-Type", "application/json; charset=utf-8"]]
+        );
+
+        let checkUpdateResponse = await httpGet(
+            result.app,
+            `/api/v1/users/${updatedUser.id}`,
+            200,
+            [["Content-Type", "application/json; charset=utf-8"]]
+        );
+        let verifyUpdatedUser = checkUpdateResponse.body;
+        expect(typeof verifyUpdatedUser.id).to.eql("number");
+        expect(verifyUpdatedUser.id).to.eql(updatedUser.id);
+        expect(verifyUpdatedUser.familyName).to.eql(updatedUser.familyName);
+    });
+
+    it("Should report validation issues as 400", async () => {
 
         const email = randomEmail();
 
