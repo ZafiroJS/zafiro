@@ -138,11 +138,16 @@ describe("Zafiro", () => {
             [["Content-Type", "application/json; charset=utf-8"]]
         );
 
-        const putUser = httpPutResponse.body;
-        expect(typeof putUser.id).to.eql("number");
-        expect(putUser.id).to.eql(updatedUser.id);
-        expect(putUser.id).to.eql(updatedUser.id);
-        expect(putUser.familyName).to.eql(updatedUser.familyName);
+        let checkUpdateResponse = await httpGet(
+            result.app,
+            `/api/v1/users/${updatedUser.id}`,
+            200,
+            [["Content-Type", "application/json; charset=utf-8"]]
+        );
+        let verifyUpdatedUser = checkUpdateResponse.body;
+        expect(typeof verifyUpdatedUser.id).to.eql("number");
+        expect(verifyUpdatedUser.id).to.eql(updatedUser.id);
+        expect(verifyUpdatedUser.familyName).to.eql(updatedUser.familyName);
     });
 
     it("Should report validation issues as 400", async () => {

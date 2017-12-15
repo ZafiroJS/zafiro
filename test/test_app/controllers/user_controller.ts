@@ -34,11 +34,11 @@ export default class UserController extends BaseHttpController {
                     error: `User ${result.error.message}`
                 });
         }
-        return await this._repository.save(user);
+        return this.saveOrUpdate(user);
     }
 
     @httpPut("/")
-    private async put( @requestBody() user: any) {
+    private async put( @requestBody() user: User) {
         const result = validate(user, User);
         if (result.error) {
             return this.httpContext.response.status(400)
@@ -46,6 +46,10 @@ export default class UserController extends BaseHttpController {
                     error: `User ${result.error.message}`
                 });
         }
+        return this.saveOrUpdate(user);
+    }
+
+    private async saveOrUpdate(user: User): Promise<User> {
         return await this._repository.save(user);
     }
 
