@@ -51,7 +51,7 @@
     "gulp-mocha": "3.0.1",
     "gulp-tslint": "8.1.2",
     "gulp-typescript": "3.2.3",
-    "mocha": "4.0.1",
+    "mocha": "4.1.0",
     "pg": "7.4.0",
     "publish-please": "2.3.1",
     "reflect-metadata": "0.1.10",
