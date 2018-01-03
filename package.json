@@ -71,7 +71,7 @@
     "helmet": "3.9.0",
     "inversify": "4.9.0",
     "inversify-express-utils": "5.2.0",
-    "pino": "4.10.2",
+    "pino": "4.10.3",
     "prettyjson": "1.2.1",
     "tslib": "1.8.1",
     "typeorm": "0.1.9"
