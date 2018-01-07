@@ -16,12 +16,14 @@ export default class UserController extends BaseHttpController {
 
     @httpGet("/")
     private async get() {
-        return await this._repository.find();
+        return await this._repository.find()
+            .catch(reason => {
+                return `couldn't find it`;
+            });
     }
 
     @httpGet("/:id")
     private async getById( @requestParam("id") id: string) {
-        console.log(`GetById: ${id}`);
         return await this._repository.findOneById(id);
     }
 
@@ -51,6 +53,22 @@ export default class UserController extends BaseHttpController {
 
     private async saveOrUpdate(user: User): Promise<User> {
         return await this._repository.save(user);
+    }
+
+    @httpDelete("/:id")
+    private async delete( @requestParam("id") userId: string, @response() res: express.Response) {
+        // Does not work
+        // return await this._repository.deleteById(userId);
+
+        // Works
+        return await this._repository.deleteById(userId)
+            .then(something => {
+                console.log("Something Happened");
+                return `deleted`;
+            }).catch(error => {
+                console.log("Something Didn't Happened");
+                return error;
+            });
     }
 
 }

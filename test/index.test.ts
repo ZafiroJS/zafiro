@@ -118,14 +118,6 @@ describe("Zafiro", () => {
     });
 
     it("Should be able to perform a PUT request", async () => {
-        const httpGetResponse = await httpGet(
-            result.app,
-            "/api/v1/users/",
-            200,
-            [["Content-Type", "application/json; charset=utf-8"]]
-        );
-
-        const actualUsers = httpGetResponse.body;
 
         let updatedUser: interfaces.User = actualUser;
         updatedUser.familyName = "updated";
@@ -148,6 +140,25 @@ describe("Zafiro", () => {
         expect(typeof verifyUpdatedUser.id).to.eql("number");
         expect(verifyUpdatedUser.id).to.eql(updatedUser.id);
         expect(verifyUpdatedUser.familyName).to.eql(updatedUser.familyName);
+    });
+
+    it("Should be able to perform a Delete request", async () => {
+
+        const httpDeleteResponse = await httpDelete<Partial<interfaces.User>>(
+            result.app,
+            `/api/v1/users/${actualUser.id}`,
+            200,
+            [["x-auth-token", "fake_credentials"]],
+        );
+
+        // Code to check that it got deleted
+        // let checkUpdateResponse = await httpGet(
+        //     result.app,
+        //     `/api/v1/users/${actualUser.id}`,
+        //     200,
+        //     [["Content-Type", "application/json; charset=utf-8"]]
+        // );
+        // let verifyUpdatedUser = checkUpdateResponse.body;
     });
 
     it("Should report validation issues as 400", async () => {
