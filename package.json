@@ -70,7 +70,7 @@
     "body-parser": "1.18.2",
     "express": "4.16.2",
     "helmet": "3.10.0",
-    "inversify": "4.9.0",
+    "inversify": "4.10.0",
     "inversify-express-utils": "5.2.1",
     "pino": "4.10.3",
     "prettyjson": "1.2.1",
