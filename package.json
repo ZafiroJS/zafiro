@@ -60,7 +60,7 @@
     "source-map-support": "0.5.1",
     "sinon": "4.2.2",
     "supertest": "3.0.0",
-    "ts-node": "4.1.0",
+    "ts-node": "5.0.0",
     "tslint": "5.9.1",
     "typescript": "2.6.2",
     "zafiro-validators": "1.1.0"
@@ -72,7 +72,7 @@
     "helmet": "3.10.0",
     "inversify": "4.10.0",
     "inversify-express-utils": "5.2.1",
-    "pino": "4.10.4",
+    "pino": "4.11.0",
     "prettyjson": "1.2.1",
     "tslib": "1.9.0",
     "typeorm": "0.1.12"
