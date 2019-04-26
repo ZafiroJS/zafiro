@@ -67,7 +67,7 @@
     "zafiro-validators": "1.1.0"
   },
   "dependencies": {
-    "body-parser": "1.18.2",
+    "body-parser": "1.19.0",
     "express": "4.16.2",
     "helmet": "3.12.0",
     "inversify": "4.11.1",
