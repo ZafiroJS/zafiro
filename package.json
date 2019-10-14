@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/remojansen/zafiro#readme",
   "devDependencies": {
-    "@types/bluebird": "3.5.20",
+    "@types/bluebird": "3.5.28",
     "@types/body-parser": "1.16.8",
     "@types/chai": "4.1.2",
     "@types/cookie-parser": "1.4.1",
